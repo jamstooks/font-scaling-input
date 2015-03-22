@@ -1,0 +1,300 @@
+<!-- <link rel="import" href="../polymer/polymer.html"> -->
+<link rel="import" href="../paper-input/paper-input-decorator.html">
+
+<!--
+This element scales the font of the input so that it always fits within
+the demensions.
+
+##### Example
+
+    <font-scaling-input
+      height="100"
+      maxFontSize="50"
+      value="This is the content of the textarea.">
+    </font-scaling-input>
+
+@element font-scaling-input
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://jamstooks.github.io/font-scaling-input
+-->
+<polymer-element
+  name="font-scaling-input"
+  attributes="maxFontSize minFontSize value height lineHeightRatio label">
+  <template>
+    <link rel="stylesheet" href="font-scaling-input.css">
+    <paper-input-decorator label="{{label}}" style="height: {{height}}px;">
+      <textarea
+        id="textarea"
+        rows="3"
+        style="font-size: {{fontSize}}px;line-height: {{fontSize|getLineHeight}}px;height: {{height}}px;"
+        value="{{value}}"
+        on-change={{valueChanged}}></textarea>
+    </paper-input-decorator>
+    <pre id="fake" style="line-height: {{fontSize|getLineHeight}}px;"></pre>
+  </template>
+  <script>
+    Polymer({
+
+      /**
+       * The `height` attribute sets a max height for the container.
+       * Currently only pixels are support
+       *
+       * @attribute height
+       * @type int
+       * @default 200
+       */
+      height: 200,
+
+      /**
+       * The `lineHeightRatio` attribute sets the line height for text.
+       * so when lineHeightRatio = 1.5 and the current font-size is 12px
+       * the line-height would calculate at 18px
+       *
+       * @attribute lineHeightRatio
+       * @type float
+       * @default 200
+       */
+       lineHeightRatio: 1.2,
+
+      /**
+       * The `maxFontSize` attribute sets the maximum font size
+       *
+       * @attribute maxFontSize
+       * @type int
+       * @default 40
+       */
+      maxFontSize: 40,
+
+       /**
+        * The `minFontSize` attribute sets the minimum font size
+        *
+        * @attribute minFontSize
+        * @type int
+        * @default 40
+        */
+       minFontSize: 3,
+
+      /**
+       * The `value` attribute sets the content of the input
+       *
+       * @attribute value
+       * @type string
+       * @default null
+       */
+      value: null,
+
+      /**
+       * The `label` attribute sets the label for the textfield
+       *
+       * @attribute label
+       * @type string
+       * @default 'type here'
+       */
+      label: 'type here',
+
+      /**
+       * The `fontSize` property is the current font-size
+       *
+       * @property fontSize
+       * @type int
+       * @default 24
+       */
+      fontSize: 24,
+      // fontSizes: [9, 10, 12, 13, 14, 16, 18, 24, 28, 36, 48, 64, 72],
+
+
+      ready: function () {
+        // add a listener to the window's resize handler
+        var self = this;
+        window.addEventListener('resize', function(e) {
+          self.evaluateFontSize();
+        });
+      },
+
+      domReady: function() {
+        this.evaluateFontSize();
+      },
+
+      getLineHeight: function(size) {
+        return Math.round(size * 1.2);
+      },
+
+      /* the textarea object has some extra padding at the bottom */
+      getFakePadding: function(size) {
+        return (this.getLineHeight(size) - size);
+      },
+
+      /**
+       * Gets the hight of the content text by using a "fake" div with the
+       * same content and calculating the height of that div
+       *
+       * @method getTextHeight
+       */
+      getTextHeight: function(text, width, fontSize) {
+        if(text == null || text == "")
+          this.$.fake.innerHTML = this.label;
+        else
+          this.$.fake.innerHTML = text;
+        this.$.fake.width = width;
+        this.$.fake.style.fontSize = fontSize + "px";
+        this.$.fake.style.lineHeight = this.getLineHeight(fontSize) + "px";
+        this.$.fake.style.padding = this.getFakePadding(fontSize) + "px";
+        this.$.fake.style.display = "block";
+        h = this.$.fake.clientHeight;
+        this.$.fake.style.display = "none";
+        return h;
+      },
+
+      /**
+       * Fired when the value changes
+       *
+       * @method valueChanged
+       */
+      valueChanged: function () {
+        this.evaluateFontSize();
+      },
+
+      /**
+       * Fired when the height changes
+       *
+       * @method heightChanged
+       */
+      heightChanged: function () {
+        this.evaluateFontSize();
+      },
+
+      /**
+       * Evaluates what font-size should be used and updates the page.
+       *
+       * @method valueChanged
+       */
+      evaluateFontSize: function() {
+        this.evaluateFontSizeFakeDiv();
+        // this.evaluateFontSizeScrollHeight();
+      },
+
+      /**
+       * Evaluates what font-size should be used based on a "fake" hidden div
+       *
+       * @method valueChanged
+       */
+      evaluateFontSizeFakeDiv: function() {
+
+        var adjustedFontSize = this.fontSize;
+        var containerWidth = this.$.textarea.clientWidth;
+        var contentHeight = this.getTextHeight(
+          this.value, containerWidth, this.fontSize)
+
+        // When the content is too large, find a smaller font
+        if(contentHeight > this.height) {
+          while(contentHeight > this.height &&
+                adjustedFontSize > this.minFontSize) {
+
+            adjustedFontSize--;
+            // console.log(adjustedFontSize);
+            contentHeight = this.getTextHeight(
+              this.value, containerWidth, adjustedFontSize)
+          }
+          this.fontSize = adjustedFontSize;
+        }
+        // If it's too small, then we can try to expand it
+        else if(contentHeight < this.height) {
+
+          while(contentHeight < this.height) {
+
+            adjustedFontSize++;
+            if(adjustedFontSize >= this.maxFontSize) {
+              this.fontSize = this.maxFontSize;
+              break;
+            }
+            // console.log(adjustedFontSize);
+            contentHeight = this.getTextHeight(
+              this.value, containerWidth, adjustedFontSize)
+
+            if(contentHeight >= this.height) {
+              this.fontSize = adjustedFontSize - 1;
+              break;
+            }
+
+            if(contentHeight == this.height) {
+              this.fontSize = adjustedFontSize;
+              break;
+            }
+          }
+
+        }
+
+        // annoying that i have to do this
+        // this.$.fake.style.fontSize = this.fontSize + "px";
+        // this.$.textarea.style.fontSize = this.fontSize + "px";
+        //
+        // console.log(
+        //   "scroll/client: " +
+        //   this.$.textarea.scrollHeight + " - " +
+        //   this.$.textarea.clientHeight
+        // );
+      },
+
+
+      /**
+       * EXPERIMENTAL - this isn't clean yet, but might present a better option
+       * to the invisible div
+       *
+       * Evaluates what font-size should be used using scrollHeight and
+       * clientHeight, but it doesn't work to expand.
+       *
+       * @method evaluateFontSizeScrollHeight
+       */
+      evaluateFontSizeScrollHeight: function() {
+        console.log("evaluating");
+        console.log(
+          "font/scroll/client: " +
+          this.fontSize + " - " +
+          this.$.textarea.scrollHeight + " - " +
+          this.$.textarea.clientHeight
+        );
+
+        if(this.$.textarea.scrollHeight > this.$.textarea.clientHeight) {
+          while(this.$.textarea.scrollHeight > this.$.textarea.clientHeight &&
+          this.fontSize > this.minFontSize) {
+            this.fontSize--;
+            this.$.textarea.style.fontSize = this.fontSize + "px";
+            console.log(
+              "font/scroll/client: " +
+              this.fontSize + " - " +
+              this.$.textarea.scrollHeight + " - " +
+              this.$.textarea.clientHeight
+            );
+          }
+        }
+        // if it's equal (can't be smaller) expand the font
+        // until we know it's bigger then scale down one
+        else if(this.$.textarea.scrollHeight <= this.$.textarea.clientHeight) {
+          while(this.$.textarea.scrollHeight <= this.$.textarea.clientHeight &&
+            this.fontSize < this.maxFontSize) {
+            this.fontSize++;
+            this.$.textarea.style.fontSize = this.fontSize + "px";
+            console.log(
+              "font/scroll/client: " +
+              this.fontSize + " - " +
+              this.$.textarea.scrollHeight + " - " +
+              this.$.textarea.clientHeight
+            );
+            if(this.$.textarea.scrollHeight > this.$.textarea.clientHeight) {
+              this.fontSize--;
+              this.$.textarea.style.fontSize = this.fontSize + "px";
+              break;
+            }
+          }
+        }
+        console.log(
+          "font/scroll/client: " +
+          this.fontSize + " - " +
+          this.$.textarea.scrollHeight + " - " +
+          this.$.textarea.clientHeight
+        );
+      }
+    });
+  </script>
+</polymer-element>

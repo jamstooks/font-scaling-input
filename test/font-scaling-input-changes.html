@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>font-scaling-input</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="../font-scaling-input.html">
+
+</head>
+<body>
+
+  <div style="width: 300px">
+  <font-scaling-input
+    id="fixture"
+    height="100"
+    maxFontSize="50"
+    value="This is one with rather a lot more text than the other one above.">
+  </font-scaling-input>
+  </div>
+
+  <script>
+    var myEl = document.getElementById('fixture');
+
+    suite('<font-scaling-input>', function() {
+
+      test("test that updates scale the font", function() {
+        var f1 = parseFloat(myEl.$.textarea.style.fontSize);
+        var f2 = null;
+        var f3 = null;
+        myEl.value += " Adding a bunch more text to test this thing!";
+        myEl.value += " And a whole lot more just for good measure!";
+        this.timeout(2000);
+        setTimeout(
+          function(){
+            f2 = parseFloat(myEl.$.textarea.style.fontSize);
+            assert.isTrue(f1>f2);
+            myEl.value = "much shorter text";
+          },
+          2000);
+        this.timeout(4000);
+        setTimeout(
+          function(){
+            f3 = parseFloat(myEl.$.textarea.style.fontSize);
+            assert.isTrue(f3>f2);
+          },
+          4000);
+      });
+    });
+  </script>
+
+</body>
+</html>

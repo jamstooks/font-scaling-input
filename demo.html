@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>font-scaling-input Demo</title>
+    <script src="../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="font-scaling-input.html">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+    <style>
+      body {
+        background-color: #eee;
+        font-family: 'Montserrat', sans-serif;
+      }
+    </style>
+  </head>
+  <body unresolved>
+    <p>An `font-scaling-input` looks like this:</p>
+    <template id="demo" is="auto-binding">
+      <div id="demoDiv1" style="width: 300px;background-color: white;">
+        <font-scaling-input
+          id="fsi1"
+          height="100"
+          maxFontSize="50"
+          value="This is one with some text.">
+        </font-scaling-input>
+      </div><br/>
+      <div id="demoDiv2" style="width: 300px;background-color: white;">
+        <font-scaling-input
+          id="fsi2"
+          height="100"
+          maxFontSize="50"
+          value="This is one with rather a lot more text than the other one above.">
+        </font-scaling-input>
+      </div>
+    </template>
+    <script>
+      var t = document.querySelector('#demo');
+
+      function changeWidth() {
+        var d = document.getElementById("demoDiv1");
+        if(d.style.width == "300px")
+          d.style.width = "600px";
+        else
+          d.style.width = "300px"
+
+        var el = document.getElementById("fsi1");
+        el.evaluateFontSize();
+      }
+
+    </script>
+    <button type="button" onclick="changeWidth()">Width</button>
+
+  </body>
+</html>
