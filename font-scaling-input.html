@@ -181,6 +181,14 @@ the demensions.
        */
       evaluateFontSizeFakeDiv: function() {
 
+        // console.log("evaluating");
+        // console.log(
+        //   "font/scroll/client: " +
+        //   this.fontSize + " - " +
+        //   this.$.textarea.scrollHeight + " - " +
+        //   this.$.textarea.clientHeight
+        // );
+
         var adjustedFontSize = this.fontSize;
         var containerWidth = this.$.textarea.clientWidth;
         var contentHeight = this.getTextHeight(
@@ -225,9 +233,9 @@ the demensions.
 
         }
 
-        // annoying that i have to do this
-        // this.$.fake.style.fontSize = this.fontSize + "px";
-        // this.$.textarea.style.fontSize = this.fontSize + "px";
+        // annoying that i have to do this for IE
+        this.$.fake.style.fontSize = this.fontSize + "px";
+        this.$.textarea.style.fontSize = this.fontSize + "px";
         //
         // console.log(
         //   "scroll/client: " +
