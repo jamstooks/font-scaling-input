@@ -1,0 +1,31 @@
+{
+  "name": "font-scaling-input",
+  "keywords": [
+    "font",
+    "scaling",
+    "textarea",
+    "input",
+    "form",
+    "polymer",
+    "web-components"
+  ],
+  "main": "font-scaling-input.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "paper-input": "Polymer/paper-input#master"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#master"
+  },
+  "homepage": "https://github.com/jamstooks/font-scaling-input",
+  "_release": "fb23cc0c94",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "fb23cc0c94070f0b8ad5697347e68802a4268db0"
+  },
+  "_source": "git://github.com/jamstooks/font-scaling-input.git",
+  "_target": "master",
+  "_originalSource": "jamstooks/font-scaling-input",
+  "_direct": true
+}

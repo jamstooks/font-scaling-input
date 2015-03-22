@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>font-scaling-input</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="../font-scaling-input.html">
+
+</head>
+<body>
+
+  <div style="width: 300px">
+  <font-scaling-input
+    id="fixture"
+    height="100"
+    maxFontSize="100"
+    value="This is one with rather a lot more text than the other one above.">
+  </font-scaling-input>
+  </div>
+
+  <script>
+    var myEl = document.getElementById('fixture');
+
+    suite('<font-scaling-input>', function() {
+
+      test("the text does not overflow the textarea on init", function() {
+        myEl.$.textarea.style.border = "1px solid grey";
+        assert.isTrue(myEl.$.textarea.clientWidth >= myEl.$.textarea.scrollWidth);
+        assert.isTrue(myEl.$.textarea.clientHeight >= myEl.$.textarea.scrollHeight);
+      });
+    });
+  </script>
+
+</body>
+</html>

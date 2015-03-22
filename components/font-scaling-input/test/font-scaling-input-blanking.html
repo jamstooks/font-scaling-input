@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>font-scaling-input</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="../font-scaling-input.html">
+
+</head>
+<body>
+
+  <div style="width: 300px">
+  <font-scaling-input
+    id="fixture"
+    height="100"
+    label="."
+    maxFontSize="50"
+    value="This is one with rather a lot more text than the other one above.">
+  </font-scaling-input>
+  </div>
+
+  <script>
+    var myEl = document.getElementById('fixture');
+
+    suite('<font-scaling-input>', function() {
+
+      test("test that clearing the text value the font size", function() {
+        var f1 = parseFloat(myEl.$.textarea.style.fontSize);
+        assert.isTrue(f1<50);
+        myEl.value = "";
+        this.timeout(1000);
+        setTimeout(
+          function(){
+            var f2 = parseFloat(myEl.$.textarea.style.fontSize);
+            assert.isTrue(f2==50);
+          },
+          1000);
+      });
+    });
+  </script>
+
+</body>
+</html>

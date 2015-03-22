@@ -1,0 +1,21 @@
+{
+  "name": "font-scaling-input",
+  "version": "0.0.1",
+  "keywords": [
+    "font",
+    "scaling",
+    "textarea",
+    "input",
+    "form",
+    "polymer",
+    "web-components"
+  ],
+  "main": "font-scaling-input.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "paper-input": "Polymer/paper-input#master"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#master"
+  }
+}
