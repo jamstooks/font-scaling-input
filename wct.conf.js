@@ -68,6 +68,7 @@ module.exports = {
           'version': '4.4',
           'deviceName': 'Android Emulator',
           'device-orientation': 'portrait'
+        }
       ]
     }
   },
