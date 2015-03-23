@@ -60,15 +60,8 @@ module.exports = {
           "browserName": "safari",
           "platform":    "OS X 10.9",
           "version":     "7"
-        },
-
-        {
-          "browserName": 'android',
-          'platform': 'Linux',
-          'version': '4.4',
-          'deviceName': 'Android Emulator',
-          'device-orientation': 'portrait'
         }
+
       ]
     }
   },
