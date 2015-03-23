@@ -11,3 +11,6 @@ before_script:
 
 script:
   - wct
+
+notifications:
+  email: false
