@@ -18,11 +18,6 @@ module.exports = {
           "platform":    "Windows 7",
           "version":     "11"
         },
-        {
-          "browserName": "internet explorer",
-          "platform":    "Windows 7",
-          "version":     "10"
-        },
 
         {
           "browserName": "chrome",
